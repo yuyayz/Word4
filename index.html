@@ -208,10 +208,12 @@ function startChallenge() {
     </div>
   `).join("");
 
-  document.getElementById("cardArea").innerHTML = html;
-  document.getElementById("topArea").style.display = "none";
-  document.getElementById("challengeArea").style.display = "block";
-  document.getElementById("detailArea").style.display = "none";
+document.getElementById("cardArea").innerHTML = html;
+document.getElementById("cardArea").style.display = "block"; // ← これを追加
+document.getElementById("topArea").style.display = "none";
+document.getElementById("challengeArea").style.display = "block";
+document.getElementById("detailArea").style.display = "none";
+
 }
 
 
@@ -264,4 +266,5 @@ function startChallenge() {
     全員一緒に合格。連帯責任！</footer>
 </p>
 </body>
+
 </html>
