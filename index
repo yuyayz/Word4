@@ -16,10 +16,21 @@
   }
 
   select, button {
-    margin: 10px 5px;
-    font-size: 1.4em;
-    padding: 8px;
-  }
+  margin: 10px 5px;
+  font-size: 1.4em;
+  padding: 8px;
+  border: none;
+  border-radius: 6px;
+  background-color: #0078D4;
+  color: white;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+button:hover {
+  background-color: #005A9E;
+}
+
 
 .card {
   border: 1px solid #ccc;
@@ -33,6 +44,15 @@
   animation: fadeInUp 0.5s ease forwards;
 }
 
+/* ホバー時の強調 */
+.card:hover {
+  background-color: #eef;
+  box-shadow: 0 0 10px rgba(0,0,0,0.2);
+  transform: scale(1.02);
+  transition: all 0.2s ease;
+}
+
+/* アニメーション定義 */
 @keyframes fadeInUp {
   to {
     opacity: 1;
