@@ -212,10 +212,52 @@ function startTimer1() {
     timerDisplay.textContent = `準備時間: ${countdown}s`;
     if (countdown <= 0) {
       clearInterval(timer);
-      shortBe
+      shortBeep.play();
+      startTimer2();
+    }
+  }, 1000);
+}
+
+// プレゼンタイマー（カウントアップ）
+function startTimer2() {
+  seconds = 0;
+  stopBtn.disabled = false;
+  stopBtn.style.display = "inline-block";
+
+  startPresentationBtn.disabled = true;
+  startPresentationBtn.style.display = "none";
+
+  timerDisplay.style.color = "#333";
+  timerDisplay.style.fontWeight = "normal";
+
+  timer = setInterval(() => {
+    seconds++;
+    timerDisplay.textContent = `プレゼン時間: ${seconds}s`;
+    if (seconds === 120) {
+      longBeep.play();
+      timerDisplay.style.color = "red";
+      timerDisplay.style.fontWeight = "bold";
+    }
+  }, 1000);
+}
+
+// ✅ Stopボタンの処理
+stopBtn.addEventListener("click", () => {
+  clearInterval(timer);              // タイマーを止める
+  timerDisplay.textContent += " （停止）";
+  stopBtn.disabled = true;
+});
+
+// ✅ プレゼン開始ボタンの処理
+startPresentationBtn.addEventListener("click", () => {
+  clearInterval(timer);   // 準備タイマーを止める
+  startTimer2();          // プレゼンタイマー開始
+});
+</script>
 
 </body>
 </html>
+
 
 
 
