@@ -237,13 +237,15 @@ function startTimer2() {
     if (seconds === 120) {
       // 🔔 ピピピと3回鳴らす処理
       let count = 0;
-      const beepInterval = setInterval(() => {
-        longBeep.play();
-        count++;
-        if (count >= 3) {
-          clearInterval(beepInterval);
-        }
-      }, 500); // 0.5秒間隔で鳴らす
+const beepInterval = setInterval(() => {
+  const beep = new Audio("https://actions.google.com/sounds/v1/alarms/beep_long.ogg");
+  beep.play();
+  count++;
+  if (count >= 3) {
+    clearInterval(beepInterval);
+  }
+}, 500);
+// 0.5秒間隔で鳴らす
       timerDisplay.style.color = "red";
       timerDisplay.style.fontWeight = "bold";
     }
@@ -347,6 +349,7 @@ function goToTop() {
 
 </body>
 </html>
+
 
 
 
