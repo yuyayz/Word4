@@ -204,7 +204,21 @@ function startTimer1() {
   timerDisplay.style.fontWeight = "normal";
   stopBtn.style.display = "none";
 
-  startPresentationBtn.style
+  // プレゼン開始ボタンを表示＆有効化
+  startPresentationBtn.style.display = "inline-block";
+  startPresentationBtn.disabled = false;
+
+  timer = setInterval(() => {
+    countdown--;
+    timerDisplay.textContent = `準備時間: ${countdown}s`;
+    if (countdown <= 0) {
+      clearInterval(timer);
+      shortBeep.play();   // ← 短い音を鳴らす
+      startTimer2();
+    }
+  }, 1000);
+}
 </body>
 </html>
+
 
