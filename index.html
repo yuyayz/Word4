@@ -3,114 +3,113 @@
 <head>
   <meta charset="UTF-8">
   <title>全国通訳案内士二次試験プレゼンテーション対策</title>
-<style>
-  body {
-    font-family: sans-serif;
-    text-align: center;
-    padding: 20px;
-    margin: 0;
-    max-width: 800px;
-    font-size: 1.4em;
-    margin-left: auto;
-    margin-right: auto;
-  }
-
-  select, button {
-  margin: 10px 5px;
-  font-size: 1.4em;
-  padding: 8px;
-  border: none;
-  border-radius: 6px;
-  background-color: #0078D4;
-  color: white;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
-}
-
-button:hover {
-  background-color: #005A9E;
-}
-
-
-.card {
-  border: 1px solid #ccc;
-  padding: 12px;
-  margin: 10px 0;
-  background: #f9f9f9;
-  cursor: pointer;
-  border-radius: 6px;
-  opacity: 0;
-  transform: translateY(20px);
-  animation: fadeInUp 0.5s ease forwards;
-}
-
-/* ホバー時の強調 */
-.card:hover {
-  background-color: #eef;
-  box-shadow: 0 0 10px rgba(0,0,0,0.2);
-  transform: scale(1.02);
-  transition: all 0.2s ease;
-}
-
-/* アニメーション定義 */
-@keyframes fadeInUp {
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-
-  .word {
-    font-weight: bold;
-    font-size: 1.4em;
-  }
-
-  .reps {
-    margin-top: 10px;
-    color: #555;
-    font-size: 1.2em;
-  }
-
-  #countdown {
-    font-size: 1.4em;
-    margin-bottom: 10px;
-    color: #333;
-  }
-
-  #cardArea, #detailArea, #challengeArea {
-    margin-top: 20px;
-  }
-
-  @media screen and (max-width: 600px) {
+  <style>
     body {
-      padding: 10px;
+      font-family: sans-serif;
+      text-align: center;
+      padding: 20px;
+      margin: 0;
+      max-width: 800px;
+      font-size: 1.4em;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    select, button {
+      margin: 10px 5px;
+      font-size: 1.4em;
+      padding: 8px;
+      border: none;
+      border-radius: 6px;
+      background-color: #0078D4;
+      color: white;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    button:hover {
+      background-color: #005A9E;
     }
 
     .card {
-      font-size: 4em;
-      padding: 10px;
+      border: 1px solid #ccc;
+      padding: 12px;
+      margin: 10px 0;
+      background: #f9f9f9;
+      cursor: pointer;
+      border-radius: 6px;
+      opacity: 0;
+      transform: translateY(20px);
+      animation: fadeInUp 0.5s ease forwards;
+    }
+
+    .card:hover {
+      background-color: #eef;
+      box-shadow: 0 0 10px rgba(0,0,0,0.2);
+      transform: scale(1.02);
+      transition: all 0.2s ease;
+    }
+
+    @keyframes fadeInUp {
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
     }
 
     .word {
+      font-weight: bold;
       font-size: 1.4em;
     }
 
     .reps {
+      margin-top: 10px;
+      color: #555;
+      font-size: 1.2em;
+    }
+
+    #countdown {
       font-size: 1.4em;
+      margin-bottom: 10px;
+      color: #333;
     }
 
-    select, button {
-      width: 100%;
-      box-sizing: border-box;
+    #cardArea, #detailArea, #challengeArea {
+      margin-top: 20px;
     }
-  }
-</style>
 
+    #timer {
+      font-size: 2em;
+      margin-top: 20px;
+    }
+
+    @media screen and (max-width: 600px) {
+      body {
+        padding: 10px;
+      }
+
+      .card {
+        font-size: 4em;
+        padding: 10px;
+      }
+
+      .word {
+        font-size: 1.4em;
+      }
+
+      .reps {
+        font-size: 1.4em;
+      }
+
+      select, button {
+        width: 100%;
+        box-sizing: border-box;
+      }
+    }
+  </style>
 </head>
 <body>
-  <h1>全国通訳案内士二次試験<br>
-      プレゼンテーション対策</h1>
+  <h1>全国通訳案内士二次試験<br>プレゼンテーション対策</h1>
   <div id="countdown"></div>
 
   <div id="topArea">
@@ -127,10 +126,12 @@ button:hover {
       <option value="original">オリジナル</option>
     </select>
     <button id="startBtn" disabled>カードを表示</button>
-
   </div>
 
   <div id="cardArea"></div>
+  <div id="timer"></div>
+  <button id="stopBtn" style="display:none;" disabled>Stop</button>
+  <button id="startPresentationBtn" style="display:none;" disabled>プレゼン開始</button>
 
   <div id="challengeArea" style="display:none;">
     <button onclick="nextChallenge()">次のチャレンジ</button>
@@ -144,25 +145,23 @@ button:hover {
     <button onclick="goToTop()">トップに戻る</button>
   </div>
 
-  <script>
+  <footer style="text-align:center; margin-top:2rem; font-size: 1.4em; color: #555; line-height: 1.6;">
+    operated by Nakahashi<br>
+    (LINE: yuya987987)<br>
+    全員一緒に合格。連帯責任！
+  </footer>
+<script>
 let data = {};
 let isReady = false;
 const examDate = new Date("2025-12-14");
 
 function updateCountdown() {
-  function shuffle(array) {
-  for (let i = array.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [array[i], array[j]] = [array[j], array[i]];
-  }
-  return array;
-}
   const today = new Date();
   const diff = Math.ceil((examDate - today) / (1000 * 60 * 60 * 24));
   document.getElementById("countdown").textContent = `本番(12/14)まであと ${diff} 日`;
 }
-
 updateCountdown();
+
 function shuffle(array) {
   for (let i = array.length - 1; i > 0; i--) {
     const j = Math.floor(Math.random() * (i + 1));
@@ -170,27 +169,81 @@ function shuffle(array) {
   }
   return array;
 }
+
 fetch("words.json")
   .then(response => {
-    if (!response.ok) {
-      throw new Error("words.json が読み込めませんでした");
-    }
+    if (!response.ok) throw new Error("words.json が読み込めませんでした");
     return response.json();
   })
   .then(json => {
-  data = json;
-  isReady = true;
-  console.log("JSON読み込み成功:", Object.keys(data));
-  document.getElementById("startBtn").disabled = false;
-  document.getElementById("startBtn").addEventListener("click", startChallenge);
-})
+    data = json;
+    isReady = true;
+    document.getElementById("startBtn").disabled = false;
+    document.getElementById("startBtn").addEventListener("click", startChallenge);
+  })
   .catch(error => {
     console.error("JSON読み込みエラー:", error);
     alert("データの読み込みに失敗しました。words.json を確認してください。");
   });
 
+let timerDisplay = document.getElementById("timer");
+let stopBtn = document.getElementById("stopBtn");
+let startPresentationBtn = document.getElementById("startPresentationBtn");
+let timer, seconds = 0;
 
+// 準備タイマー（30秒）
+function startTimer1() {
+  let countdown = 30;
+  timerDisplay.textContent = `準備時間: ${countdown}s`;
+  timerDisplay.style.color = "#333";
+  timerDisplay.style.fontWeight = "normal";
+  stopBtn.style.display = "none";
 
+  // プレゼン開始ボタンを表示＆有効化
+  startPresentationBtn.style.display = "inline-block";
+  startPresentationBtn.disabled = false;
+
+  timer = setInterval(() => {
+    countdown--;
+    timerDisplay.textContent = `準備時間: ${countdown}s`;
+    if (countdown <= 0) {
+      clearInterval(timer);
+      startTimer2();
+    }
+  }, 1000);
+}
+
+// プレゼンタイマー（カウントアップ）
+function startTimer2() {
+  seconds = 0;
+  stopBtn.disabled = false;
+  stopBtn.style.display = "inline-block";
+  startPresentationBtn.disabled = true; // プレゼン開始ボタンは無効化
+  timerDisplay.style.color = "#333";
+  timerDisplay.style.fontWeight = "normal";
+
+  timer = setInterval(() => {
+    seconds++;
+    timerDisplay.textContent = `プレゼン時間: ${seconds}s`;
+    if (seconds >= 120) {
+      timerDisplay.style.color = "red";
+      timerDisplay.style.fontWeight = "bold";
+    }
+  }, 1000);
+}
+
+// Stopボタン
+stopBtn.addEventListener("click", () => {
+  clearInterval(timer);
+  timerDisplay.textContent += " （停止）";
+  stopBtn.disabled = true;
+});
+
+// プレゼン開始ボタン（途中切り替え用）
+startPresentationBtn.addEventListener("click", () => {
+  clearInterval(timer);   // 準備タイマーを止める
+  startTimer2();          // プレゼンタイマー開始
+});
 function startChallenge() {
   if (!isReady) {
     alert("データの読み込み中です。少し待ってからもう一度お試しください。");
@@ -199,67 +252,61 @@ function startChallenge() {
 
   const category = document.getElementById("category").value;
   const cards = data[category];
-
-  console.log("選択カテゴリ:", category);
-  console.log("カード数:", cards ? cards.length : "なし");
-  console.log("カード内容:", cards);
-  
   if (!cards || cards.length === 0) {
     alert("このカテゴリーにカードがありません");
     return;
   }
 
- const shuffled = shuffle([...cards]); // 配列をコピーしてシャッフル
-const selected = shuffled.slice(0, 3); // 先頭3枚を選ぶ
+  const shuffled = shuffle([...cards]);
+  const selected = shuffled.slice(0, 3);
 
   const html = selected.map(card => `
-    <div class="card" onclick="showDetail('${card.word}')">
+    <div class="card" onclick="showDetail('${card.word.replace(/'/g, "\\'")}')">
       <div class="word">${card.word}</div>
     </div>
   `).join("");
 
-document.getElementById("cardArea").innerHTML = html;
-document.getElementById("cardArea").style.display = "block"; // ← これを追加
-document.getElementById("topArea").style.display = "none";
-document.getElementById("challengeArea").style.display = "block";
-document.getElementById("detailArea").style.display = "none";
+  document.getElementById("cardArea").innerHTML = html;
+  document.getElementById("cardArea").style.display = "block";
+  document.getElementById("topArea").style.display = "none";
+  document.getElementById("challengeArea").style.display = "block";
+  document.getElementById("detailArea").style.display = "none";
 
+  startTimer1(); // ← タイマー開始を統合
 }
 
+function showDetail(word) {
+  const category = document.getElementById("category").value;
+  const cards = data[category];
+  const match = cards.find(c => c.word === word);
+  if (!match) return;
 
+  const html = `
+    <div class="card">
+      <div class="word">${match.word}</div>
+      <div class="reps">${Array.isArray(match.reps) ? match.reps.join("、 ") : ""}</div>
+    </div>
+  `;
+  document.getElementById("detailCard").innerHTML = html;
+  document.getElementById("cardArea").style.display = "none";
+  document.getElementById("challengeArea").style.display = "none";
+  document.getElementById("detailArea").style.display = "block";
+}
 
-    function showDetail(word) {
-      const category = document.getElementById("category").value;
-      const cards = data[category];
-      const match = cards.find(c => c.word === word);
-      if (!match) return;
+function goBack() {
+  document.getElementById("detailArea").style.display = "none";
+  document.getElementById("cardArea").style.display = "block";
+  document.getElementById("challengeArea").style.display = "block";
+}
 
-      const html = `
-        <div class="card">
-          <div class="word">${match.word}</div>
-          <div class="reps">${match.reps.join("、 ")}</div>
-        </div>
-      `;
-      document.getElementById("detailCard").innerHTML = html;
-      document.getElementById("cardArea").style.display = "none";
-      document.getElementById("challengeArea").style.display = "none";
-      document.getElementById("detailArea").style.display = "block";
-    }
+function nextChallenge() {
+  document.getElementById("detailArea").style.display = "none";
+  document.getElementById("cardArea").innerHTML = "";
+  document.getElementById("cardArea").style.display = "block";
+  startChallenge();
+}
 
-    function goBack() {
-      document.getElementById("detailArea").style.display = "none";
-      document.getElementById("cardArea").style.display = "block";
-      document.getElementById("challengeArea").style.display = "block";
-    }
-
-    function nextChallenge() {
-      document.getElementById("detailArea").style.display = "none";
-      document.getElementById("cardArea").innerHTML = "";
-      document.getElementById("cardArea").style.display = "block";
-      startChallenge();
-    }
-
-    function goToTop() {
+function goToTop() {
   document.getElementById("cardArea").innerHTML = "";
   document.getElementById("detailCard").innerHTML = "";
   document.getElementById("topArea").style.display = "block";
@@ -267,15 +314,6 @@ document.getElementById("detailArea").style.display = "none";
   document.getElementById("challengeArea").style.display = "none";
   document.getElementById("detailArea").style.display = "none";
 }
-
-  </script>
-  <footer style="text-align:center; margin-top:2rem; font-size: 1.4em: color: #555; line-height: 1.6;
-    ">
-  operated by Nakahashi<br>
-  (LINE: yuya987987)<br>
-    全員一緒に合格。連帯責任！</footer>
-</p>
+</script>
 </body>
-
 </html>
-
