@@ -192,6 +192,10 @@ let stopBtn = document.getElementById("stopBtn");
 let startPresentationBtn = document.getElementById("startPresentationBtn");
 let timer, seconds = 0;
 
+// 🔔 アラーム音を定義
+const shortBeep = new Audio("https://actions.google.com/sounds/v1/alarms/beep_short.ogg");
+const longBeep = new Audio("https://actions.google.com/sounds/v1/alarms/beep_long.ogg");
+
 // 準備タイマー（30秒）
 function startTimer1() {
   let countdown = 30;
@@ -200,138 +204,7 @@ function startTimer1() {
   timerDisplay.style.fontWeight = "normal";
   stopBtn.style.display = "none";
 
-  // プレゼン開始ボタンを表示＆有効化
-  startPresentationBtn.style.display = "inline-block";
-  startPresentationBtn.disabled = false;
-
-  timer = setInterval(() => {
-    countdown--;
-    timerDisplay.textContent = `準備時間: ${countdown}s`;
-    if (countdown <= 0) {
-      clearInterval(timer);
-      startTimer2();
-    }
-  }, 1000);
-}
-
-// プレゼンタイマー（カウントアップ）
-function startTimer2() {
-  seconds = 0;
-  stopBtn.disabled = false;
-  stopBtn.style.display = "inline-block";
-
-  // プレゼン開始ボタンは無効化＆非表示にする
-  startPresentationBtn.disabled = true;
-  startPresentationBtn.style.display = "none";
-
-  timerDisplay.style.color = "#333";
-  timerDisplay.style.fontWeight = "normal";
-
-  timer = setInterval(() => {
-    seconds++;
-    timerDisplay.textContent = `プレゼン時間: ${seconds}s`;
-    if (seconds >= 120) {
-      timerDisplay.style.color = "red";
-      timerDisplay.style.fontWeight = "bold";
-    }
-  }, 1000);
-}
-// Stopボタン
-stopBtn.addEventListener("click", () => {
-  clearInterval(timer);
-  timerDisplay.textContent += " （停止）";
-  stopBtn.disabled = true;
-});
-
-// プレゼン開始ボタン（途中切り替え用）
-startPresentationBtn.addEventListener("click", () => {
-  clearInterval(timer);   // 準備タイマーを止める
-  startTimer2();          // プレゼンタイマー開始
-});
-function startChallenge() {
-  if (!isReady) {
-    alert("データの読み込み中です。少し待ってからもう一度お試しください。");
-    return;
-  }
-
-  const category = document.getElementById("category").value;
-  const cards = data[category];
-  if (!cards || cards.length === 0) {
-    alert("このカテゴリーにカードがありません");
-    return;
-  }
-
-  const shuffled = shuffle([...cards]);
-  const selected = shuffled.slice(0, 3);
-
-  const html = selected.map(card => `
-    <div class="card" onclick="showDetail('${card.word.replace(/'/g, "\\'")}')">
-      <div class="word">${card.word}</div>
-    </div>
-  `).join("");
-
-  document.getElementById("cardArea").innerHTML = html;
-  document.getElementById("cardArea").style.display = "block";
-  document.getElementById("topArea").style.display = "none";
-  document.getElementById("challengeArea").style.display = "block";
-  document.getElementById("detailArea").style.display = "none";
-
-  startTimer1(); // ← タイマー開始を統合
-}
-
-function showDetail(word) {
-  const category = document.getElementById("category").value;
-  const cards = data[category];
-  const match = cards.find(c => c.word === word);
-  if (!match) return;
-
-  const html = `
-    <div class="card">
-      <div class="word">${match.word}</div>
-      <div class="reps">${Array.isArray(match.reps) ? match.reps.join("、 ") : ""}</div>
-    </div>
-  `;
-  document.getElementById("detailCard").innerHTML = html;
-  document.getElementById("cardArea").style.display = "none";
-  document.getElementById("challengeArea").style.display = "none";
-  document.getElementById("detailArea").style.display = "block";
-}
-
-function goBack() {
-  document.getElementById("detailArea").style.display = "none";
-  document.getElementById("cardArea").style.display = "block";
-  document.getElementById("challengeArea").style.display = "block";
-}
-
-function nextChallenge() {
-  clearInterval(timer); // ← これを追加して、前のタイマーを止める
-  document.getElementById("detailArea").style.display = "none";
-  document.getElementById("cardArea").innerHTML = "";
-  document.getElementById("cardArea").style.display = "block";
-  startChallenge();
-}
-
-
-function goToTop() {
-  // タイマーを止める
-  clearInterval(timer);
-  seconds = 0;
-  timerDisplay.textContent = "";
-
-  // ボタン類を初期化
-  stopBtn.style.display = "none";
-  stopBtn.disabled = true;
-  startPresentationBtn.style.display = "none";
-  startPresentationBtn.disabled = true;
-
-  // UIをトップ画面に戻す
-  document.getElementById("cardArea").innerHTML = "";
-  document.getElementById("detailCard").innerHTML = "";
-  document.getElementById("topArea").style.display = "block";
-  document.getElementById("cardArea").style.display = "none";
-  document.getElementById("challengeArea").style.display = "none";
-  document.getElementById("detailArea").style.display = "none";
-}
-</script>
+  startPresentationBtn.style
 </body>
 </html>
+
