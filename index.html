@@ -148,7 +148,8 @@
   <footer style="text-align:center; margin-top:2rem; font-size: 1.4em; color: #555; line-height: 1.6;">
     operated by Nakahashi<br>
     (LINE: yuya987987)<br>
-    全員一緒に合格。連帯責任！
+    全員一緒に合格。<br>
+    Let's enjoy the process!（陽は必ず昇る）<br>
   </footer>
 <script>
 let data = {};
@@ -312,6 +313,18 @@ function nextChallenge() {
 
 
 function goToTop() {
+  // タイマーを止める
+  clearInterval(timer);
+  seconds = 0;
+  timerDisplay.textContent = "";
+
+  // ボタン類を初期化
+  stopBtn.style.display = "none";
+  stopBtn.disabled = true;
+  startPresentationBtn.style.display = "none";
+  startPresentationBtn.disabled = true;
+
+  // UIをトップ画面に戻す
   document.getElementById("cardArea").innerHTML = "";
   document.getElementById("detailCard").innerHTML = "";
   document.getElementById("topArea").style.display = "block";
@@ -322,5 +335,3 @@ function goToTop() {
 </script>
 </body>
 </html>
-
-
