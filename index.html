@@ -197,15 +197,11 @@ const shortBeep = new Audio("https://actions.google.com/sounds/v1/alarms/beep_sh
 const longBeep = new Audio("https://actions.google.com/sounds/v1/alarms/beep_long.ogg");
 
 // 準備タイマー（30秒）
-// 準備タイマー（30秒）
 function startTimer1() {
   let countdown = 30;
   timerDisplay.textContent = `準備時間: ${countdown}s`;
-  timerDisplay.style.color = "#333";
-  timerDisplay.style.fontWeight = "normal";
   stopBtn.style.display = "none";
 
-  // プレゼン開始ボタンを表示＆有効化
   startPresentationBtn.style.display = "inline-block";
   startPresentationBtn.disabled = false;
 
@@ -214,8 +210,8 @@ function startTimer1() {
     timerDisplay.textContent = `準備時間: ${countdown}s`;
     if (countdown <= 0) {
       clearInterval(timer);
-      shortBeep.play();   // ← 短い音を鳴らす
-      startTimer2();      // ← ここでプレゼンタイマーへ移行
+      shortBeep.play();   // 短い音
+      startTimer2();      // プレゼンタイマーへ移行
     }
   }, 1000);
 }
@@ -226,26 +222,105 @@ function startTimer2() {
   stopBtn.disabled = false;
   stopBtn.style.display = "inline-block";
 
-  // プレゼン開始ボタンは無効化＆非表示
   startPresentationBtn.disabled = true;
   startPresentationBtn.style.display = "none";
-
-  timerDisplay.style.color = "#333";
-  timerDisplay.style.fontWeight = "normal";
 
   timer = setInterval(() => {
     seconds++;
     timerDisplay.textContent = `プレゼン時間: ${seconds}s`;
     if (seconds === 120) {
-      longBeep.play();   // ← 長い音を鳴らす
+      longBeep.play();   // 長い音
       timerDisplay.style.color = "red";
       timerDisplay.style.fontWeight = "bold";
     }
   }, 1000);
 }
 
+// カード表示処理
+function startChallenge() {
+  if (!isReady) {
+    alert("データの読み込み中です。少し待ってからもう一度お試しください。");
+    return;
+  }
+
+  const category = document.getElementById("category").value;
+  const cards = data[category];
+  if (!cards || cards.length === 0) {
+    alert("このカテゴリーにカードがありません");
+    return;
+  }
+
+  const shuffled = shuffle([...cards]);
+  const selected = shuffled.slice(0, 3);
+
+  const html = selected.map(card => `
+    <div class="card" onclick="showDetail('${card.word.replace(/'/g, "\\'")}')">
+      <div class="word">${card.word}</div>
+    </div>
+  `).join("");
+
+  document.getElementById("cardArea").innerHTML = html;
+  document.getElementById("cardArea").style.display = "block";
+  document.getElementById("topArea").style.display = "none";
+  document.getElementById("challengeArea").style.display = "block";
+  document.getElementById("detailArea").style.display = "none";
+
+  startTimer1(); // タイマー開始
+}
+
+function showDetail(word) {
+  const category = document.getElementById("category").value;
+  const cards = data[category];
+  const match = cards.find(c => c.word === word);
+  if (!match) return;
+
+  const html = `
+    <div class="card">
+      <div class="word">${match.word}</div>
+      <div class="reps">${Array.isArray(match.reps) ? match.reps.join("、 ") : ""}</div>
+    </div>
+  `;
+  document.getElementById("detailCard").innerHTML = html;
+  document.getElementById("cardArea").style.display = "none";
+  document.getElementById("challengeArea").style.display = "none";
+  document.getElementById("detailArea").style.display = "block";
+}
+
+function goBack() {
+  document.getElementById("detailArea").style.display = "none";
+  document.getElementById("cardArea").style.display = "block";
+  document.getElementById("challengeArea").style.display = "block";
+}
+
+function nextChallenge() {
+  clearInterval(timer);
+  document.getElementById("detailArea").style.display = "none";
+  document.getElementById("cardArea").innerHTML = "";
+  document.getElementById("cardArea").style.display = "block";
+  startChallenge();
+}
+
+function goToTop() {
+  clearInterval(timer);
+  seconds = 0;
+  timerDisplay.textContent = "";
+  stopBtn.style.display = "none";
+  stopBtn.disabled = true;
+  startPresentationBtn.style.display = "none";
+  startPresentationBtn.disabled = true;
+  document.getElementById("cardArea").innerHTML = "";
+  document.getElementById("detailCard").innerHTML = "";
+  document.getElementById("topArea").style.display = "block";
+  document.getElementById("cardArea").style.display = "none";
+  document.getElementById("challengeArea").style.display = "none";
+  document.getElementById("detailArea").style.display = "none";
+}
+</script>
+
+
 </body>
 </html>
+
 
 
 
