@@ -151,7 +151,8 @@
     全員一緒に合格。<br>
     Let's enjoy the process!（陽は必ず昇る）<br>
   </footer>
-<script>
+
+  <script>
 let data = {};
 let isReady = false;
 const examDate = new Date("2025-12-14");
@@ -234,29 +235,119 @@ function startTimer2() {
     seconds++;
     timerDisplay.textContent = `プレゼン時間: ${seconds}s`;
     if (seconds === 120) {
-      longBeep.play();
+      // 🔔 ピピピと3回鳴らす処理
+      let count = 0;
+      const beepInterval = setInterval(() => {
+        longBeep.play();
+        count++;
+        if (count >= 3) {
+          clearInterval(beepInterval);
+        }
+      }, 500); // 0.5秒間隔で鳴らす
       timerDisplay.style.color = "red";
       timerDisplay.style.fontWeight = "bold";
     }
   }, 1000);
 }
 
-// ✅ Stopボタンの処理
+
+// Stopボタン
 stopBtn.addEventListener("click", () => {
-  clearInterval(timer);              // タイマーを止める
+  clearInterval(timer);
   timerDisplay.textContent += " （停止）";
   stopBtn.disabled = true;
 });
 
-// ✅ プレゼン開始ボタンの処理
+// プレゼン開始ボタン
 startPresentationBtn.addEventListener("click", () => {
   clearInterval(timer);   // 準備タイマーを止める
   startTimer2();          // プレゼンタイマー開始
 });
+
+// カード表示処理
+function startChallenge() {
+  if (!isReady) {
+    alert("データの読み込み中です。少し待ってからもう一度お試しください。");
+    return;
+  }
+
+  const category = document.getElementById("category").value;
+  const cards = data[category];
+  if (!cards || cards.length === 0) {
+    alert("このカテゴリーにカードがありません");
+    return;
+  }
+
+  const shuffled = shuffle([...cards]);
+  const selected = shuffled.slice(0, 3);
+
+  const html = selected.map(card => `
+    <div class="card" onclick="showDetail('${card.word.replace(/'/g, "\\'")}')">
+      <div class="word">${card.word}</div>
+    </div>
+  `).join("");
+
+  document.getElementById("cardArea").innerHTML = html;
+  document.getElementById("cardArea").style.display = "block";
+  document.getElementById("topArea").style.display = "none";
+  document.getElementById("challengeArea").style.display = "block";
+  document.getElementById("detailArea").style.display = "none";
+
+  startTimer1(); // 準備タイマー開始
+}
+
+function showDetail(word) {
+  const category = document.getElementById("category").value;
+  const cards = data[category];
+  const match = cards.find(c => c.word === word);
+  if (!match) return;
+
+  const html = `
+    <div class="card">
+      <div class="word">${match.word}</div>
+      <div class="reps">${Array.isArray(match.reps) ? match.reps.join("、 ") : ""}</div>
+    </div>
+  `;
+  document.getElementById("detailCard").innerHTML = html;
+  document.getElementById("cardArea").style.display = "none";
+  document.getElementById("challengeArea").style.display = "none";
+  document.getElementById("detailArea").style.display = "block";
+}
+
+function goBack() {
+  document.getElementById("detailArea").style.display = "none";
+  document.getElementById("cardArea").style.display = "block";
+  document.getElementById("challengeArea").style.display = "block";
+}
+
+function nextChallenge() {
+  clearInterval(timer);
+  document.getElementById("detailArea").style.display = "none";
+  document.getElementById("cardArea").innerHTML = "";
+  document.getElementById("cardArea").style.display = "block";
+  startChallenge();
+}
+
+function goToTop() {
+  clearInterval(timer);
+  seconds = 0;
+  timerDisplay.textContent = "";
+  stopBtn.style.display = "none";
+  stopBtn.disabled = true;
+  startPresentationBtn.style.display = "none";
+  startPresentationBtn.disabled = true;
+  document.getElementById("cardArea").innerHTML = "";
+  document.getElementById("detailCard").innerHTML = "";
+  document.getElementById("topArea").style.display = "block";
+  document.getElementById("cardArea").style.display = "none";
+  document.getElementById("challengeArea").style.display = "none";
+  document.getElementById("detailArea").style.display = "none";
+}
 </script>
 
 </body>
 </html>
+
 
 
 
