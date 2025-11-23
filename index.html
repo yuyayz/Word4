@@ -238,8 +238,7 @@ function startTimer2() {
       // 🔔 ピピピと3回鳴らす処理
       let count = 0;
 const beepInterval = setInterval(() => {
-  const beep = new Audio("https://actions.google.com/sounds/v1/alarms/beep_long.ogg");
-  beep.play();
+  longBeep.cloneNode().play();   // ← 既存のAudioを複製して鳴らす
   count++;
   if (count >= 3) {
     clearInterval(beepInterval);
@@ -349,6 +348,7 @@ function goToTop() {
 
 </body>
 </html>
+
 
 
 
