@@ -274,10 +274,30 @@ stopBtn.addEventListener("click", () => {
 });
 
 // プレゼン開始ボタン
-startPresentationBtn.addEventListener("click", () => {
+// グローバルに追加
+let audioUnlocked = false;
+const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+
+startPresentationBtn.addEventListener("click", async () => {
   clearInterval(timer);   // 準備タイマーを止める
+
+  // ① AudioContext をユーザー操作で解放
+  if (audioCtx.state === "suspended") {
+    try { await audioCtx.resume(); } catch (e) { console.log("AudioContext resume失敗:", e); }
+  }
+
+  // ② 実際に一度音を鳴らして「許可」を獲得
+  try {
+    await longBeep.play();     // ここで鳴れば解放成功
+    audioUnlocked = true;
+  } catch (e) {
+    console.log("初回再生失敗:", e);
+    audioUnlocked = false;
+  }
+
   startTimer2();          // プレゼンタイマー開始
 });
+
 
 // カード表示処理
 function startChallenge() {
@@ -362,6 +382,7 @@ function goToTop() {
 
 </body>
 </html>
+
 
 
 
