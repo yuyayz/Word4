@@ -208,24 +208,18 @@ function startTimer1() {
   startPresentationBtn.style.display = "inline-block";
   startPresentationBtn.disabled = false;
 
-timer = setInterval(() => {
-  seconds++;
-  timerDisplay.textContent = `プレゼン時間: ${seconds}s`;
-  if (seconds === 120) {
-    // 🔔 ピピピと3回鳴らす処理
-    let count = 0;
-    const beepInterval = setInterval(() => {
-      longBeep.cloneNode().play();   // 毎回複製して鳴らす
-      count++;
-      if (count >= 3) {
-        clearInterval(beepInterval);
-      }
-    }, 600); // 0.6秒間隔で鳴らす
+  // ✅ 準備時間のカウントダウンだけを行う
+  timer = setInterval(() => {
+    countdown--;
+    timerDisplay.textContent = `準備時間: ${countdown}s`;
+    if (countdown <= 0) {
+      clearInterval(timer);
+      shortBeep.play();   // 準備終了時に短い音
+      startTimer2();      // プレゼンタイマーへ移行
+    }
+  }, 1000);
+}
 
-    timerDisplay.style.color = "red";
-    timerDisplay.style.fontWeight = "bold";
-  }
-}, 1000);
 
 
 // プレゼンタイマー（カウントアップ）
@@ -357,6 +351,7 @@ function goToTop() {
 
 </body>
 </html>
+
 
 
 
