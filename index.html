@@ -132,7 +132,7 @@
   <div id="timer"></div>
   <button id="stopBtn" style="display:none;" disabled>Stop</button>
   <button id="startPresentationBtn" style="display:none;" disabled>プレゼン開始</button>
-
+  <button id="resetBtn" style="display:none;" disabled>再カウント</button>
   <div id="challengeArea" style="display:none;">
     <button onclick="nextChallenge()">次のチャレンジ</button>
     <button onclick="goToTop()">トップに戻る</button>
@@ -190,6 +190,7 @@ fetch("words.json")
 
 let timerDisplay = document.getElementById("timer");
 let stopBtn = document.getElementById("stopBtn");
+let resetBtn = document.getElementById("resetBtn");
 let startPresentationBtn = document.getElementById("startPresentationBtn");
 let timer, seconds = 0;
 
@@ -205,8 +206,12 @@ function startTimer1() {
   timerDisplay.style.fontWeight = "normal";
   stopBtn.style.display = "none";
 
-  startPresentationBtn.style.display = "inline-block";
-  startPresentationBtn.disabled = false;
+startPresentationBtn.style.display = "inline-block";
+startPresentationBtn.disabled = false;
+
+resetBtn.style.display = "inline-block";
+resetBtn.disabled = false;
+
 
   // ✅ 修正：countdown-- を使って準備時間を減らす
   timer = setInterval(() => {
@@ -231,6 +236,10 @@ function startTimer2() {
 
   startPresentationBtn.disabled = true;
   startPresentationBtn.style.display = "none";
+
+  resetBtn.style.display = "none";
+  resetBtn.disabled = true;
+
 
   timerDisplay.style.color = "#333";
   timerDisplay.style.fontWeight = "normal";
@@ -287,6 +296,13 @@ startPresentationBtn.addEventListener("click", async () => {
 
   startTimer2();          // プレゼンタイマー開始
 });
+
+// 🔹 ここを追加（startPresentationBtn の外側に新しいイベントリスナー）
+resetBtn.addEventListener("click", () => {
+  clearInterval(timer);
+  startTimer1(); // 準備タイマーを再スタート
+});
+
 
 
 // カード表示処理
@@ -361,6 +377,9 @@ function goToTop() {
   stopBtn.disabled = true;
   startPresentationBtn.style.display = "none";
   startPresentationBtn.disabled = true;
+  resetBtn.style.display = "none";
+  resetBtn.disabled = true;
+
   document.getElementById("cardArea").innerHTML = "";
   document.getElementById("detailCard").innerHTML = "";
   document.getElementById("topArea").style.display = "block";
@@ -372,6 +391,7 @@ function goToTop() {
 
 </body>
 </html>
+
 
 
 
